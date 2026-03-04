@@ -605,3 +605,40 @@ export ASSET_DRAWER_PASS="your-strong-pass"
 保留原则：
 - 代码逻辑：MIT
 - 美术资产：禁止商用（仅学习/演示/交流用途）
+
+### F) 2026-03-04 P0/P1 安全与稳定性更新（新增）
+
+本次补丁聚焦“可上线稳定运行 + 状态同步真实性”，不减少已有功能。
+
+1. **P0 安全基线**
+   - 增加生产模式安全校验（弱 secret / 弱口令阻止启动）
+   - Session Cookie 安全参数加固
+   - `runtime-config.json` 权限收紧（best-effort `600`）
+   - 新增 `scripts/security_check.py`（上线前安全自检）
+
+2. **P1 结构优化（无行为变化）**
+   - 后端拆分为：
+     - `backend/security_utils.py`
+     - `backend/memo_utils.py`
+     - `backend/store_utils.py`
+   - 降低 `app.py` 耦合度，便于后续维护
+
+3. **状态同步修复（核心）**
+   - 修复状态源读取路径
+   - 增加 stale 自动回 `idle`
+   - 前端轮询更及时，并加强动画/视觉状态对齐
+
+4. **生图模型策略收敛**
+   - 用户侧仅保留：`nanobanana-pro` / `nanobanana-2`
+   - 补充错误细节透出，提升排查效率
+
+5. **首屏体验优化**
+   - 首页 HTML 缓存
+   - 非关键初始化延后
+   - 骨架屏替代纯黑屏等待
+
+6. **服务稳定性修复**
+   - 统一并修复 `star-office-ui.service`（18888 常驻）
+   - 保持 `star-office-push.service` 与 UI 服务联动
+
+> 详细说明见：`docs/UPDATE_REPORT_2026-03-04_P0_P1.md`
